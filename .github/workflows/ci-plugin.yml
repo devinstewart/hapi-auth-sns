@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: install
         run: npm install
-       - name: install hapi
+      - name: install hapi
         run: npm install @hapi/hapi@${{ matrix.hapi }}
       - name: test
         run: npm test
