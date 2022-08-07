@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu, windows, macos]
+        node: ['16', '14']
+        hapi: ['20', '19']
+
+    runs-on: ${{ matrix.os }}-latest
+    name: ${{ matrix.os }} node@${{ matrix.node }} hapi@${{ matrix.hapi }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - name: install
+        run: npm install
+       - name: install hapi
+        run: npm install @hapi/hapi@${{ matrix.hapi }}
+      - name: test
+        run: npm test
+      - name: coverage
+        run: npm run test-cov-lcov
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
+        with:
+          path-to-lcov: coverage.info
+          github-token: ${{ secrets.github_token }}
+          flag-name: npm run test-cov-lcov
+          parallel: true
+
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          path-to-lcov: coverage.info
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
