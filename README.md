@@ -58,7 +58,9 @@ init();
 ```
 
 ## Scopes
-The scope in the credentials is set to the topic name, derived from the `TopicArn` in the payload.  To limit your scope to a single topic, you can set the `scope` option to the topic name:
+The scope in the credentials is set to the topic name, derived from the `TopicArn` in the payload.
+
+To limit the route to a single topic, set the `scope` option to the topic name:
 ```js
 auth: {
     strategy: 'mySnsStrategy',
@@ -66,7 +68,7 @@ auth: {
 }
 ```
 
-If you want to allow multiple topics, you can set the `scope` option to an array of topic names:
+To allow multiple topics, set the `scope` option to an array of topic names:
 ```js
 auth: {
     strategy: 'mySnsStrategy',
@@ -74,7 +76,7 @@ auth: {
 }
 ```
 
-if you want to allow all topics, you can omit the `scope` option:
+To allow all topics, omit the `scope` option:
 ```js
 auth: {
     strategy: 'mySnsStrategy'
@@ -83,10 +85,10 @@ auth: {
 
 ## Options
 There are two options available for the sns strategy:
-- `autoSubscribe` - A message type of `SubscriptionConfirmation` automatically subscribes route to the topic after validation, default `true`.
-- `autoResubscribe` - A message type of `UnsubscribeConfirmation` automatically resubscribes route to the topic after validation, default `true`.
+- `autoSubscribe` - A message type of `SubscriptionConfirmation` automatically subscribes the route to the topic after validation, default `true`.
+- `autoResubscribe` - A message type of `UnsubscribeConfirmation` automatically resubscribes the route to the topic after validation, default `true`.
 
-You can disable one or both when declaring the strategy:
+Either one or both can be disabled when declaring the strategy:
 ```js
 server.auth.strategy('mySnsStrategy', 'sns', {
     autoSubscribe: false,
@@ -98,16 +100,16 @@ server.auth.strategy('mySnsStrategy', 'sns', {
 The `request.payload` will have the following properties:
 - `Type` - The message type: `Notification`, `SubscriptionConfirmation` or `UnsubscribeConfirmation`.
 - `MessageId` - A uuid provided by the SNS service for each message.
-- `Token` - The token that must be passed to the `SubscribeURL` to confirm the subscription When the message type is `SubscriptionConfirmation` or `UnsubscribeConfirmation`.
+- `Token` - The token that must be passed to the `SubscribeURL` to confirm the subscription when the message type is `SubscriptionConfirmation` or `UnsubscribeConfirmation`.
 - `TopicArn` - The ARN of the topic the message was sent from.
 - `Subject` - The subject of the message when the message type is `Notification`. This is not present if a Subject was not provided when the message was published.
 - `Message` - The message body when the message type is `Notification`.
 - `Timestamp` - The time the message was sent.
 - `SignatureVersion` - The version of the signature algorithm used to sign the message. Always `'1'`.
-- `Signature` - The signature of the message, used to verify the message integrity.
+- `Signature` - The signature of the message used to verify the message integrity.
 - `SigningCertURL` - The URL of the certificate used to sign the message.
-- `SubscribeURL` - The URL used to subscribe the route when message type is `SubscriptionConfirmation` or `UnsubscribeConfirmation`.
-- `UnsubscribeURL` - The URL used to unsubscribe the route when type is `Notification`.
+- `SubscribeURL` - The URL used to subscribe the route when the message type is `SubscriptionConfirmation` or `UnsubscribeConfirmation`.
+- `UnsubscribeURL` - The URL used to unsubscribe the route when the message type is `Notification`.
 
 Due to how payload validation works, `request.auth.credentials.sns` will be set to `true` if payload is valid.  However, it is not used by the plugin.
 
