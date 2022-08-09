@@ -2,7 +2,7 @@
   "name": "hapi-auth-sns",
   "description": "AWS SNS Authentication",
   "version": "1.0.0",
-  "repository": "git://github.com/devinstewrt/hapi-auth-sns",
+  "repository": "git://github.com/devinstewart/hapi-auth-sns",
   "main": "lib/index.js",
   "files": [
     "lib"
