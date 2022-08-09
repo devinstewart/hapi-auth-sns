@@ -50,10 +50,11 @@ describe('Plugin', () => {
         server.auth.strategy('sns', 'sns', { autoSubscribe: false, autoResubscribe: false });
 
         server.auth.default('sns');
-        server.route({ path: '/', method: 'POST', handler: successHandler });
+        server.route({ path: '/', method: 'POST', handler: (request) => request.auth.credentials.sns });
 
         const res = await server.inject({ method: 'POST', url: '/', payload: Mock.validNotification });
         expect(res.statusCode).to.equal(200);
+        expect(res.result).to.equal(true);
     });
 
     it('subscribes to topic on subscription confirmation', async () => {
