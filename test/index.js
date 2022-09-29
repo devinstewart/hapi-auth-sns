@@ -43,7 +43,7 @@ describe('Plugin', () => {
 
     beforeEach(() => setupCertNock());
 
-    it('returns 200 on valid payload', async () => {
+    it('returns 200 on valid payload, SignatureVersion 1', async () => {
 
         const server = Hapi.server();
         await server.register(Sns);
@@ -52,7 +52,21 @@ describe('Plugin', () => {
         server.auth.default('sns');
         server.route({ path: '/', method: 'POST', handler: (request) => request.auth.credentials.sns });
 
-        const res = await server.inject({ method: 'POST', url: '/', payload: Mock.validNotification });
+        const res = await server.inject({ method: 'POST', url: '/', payload: Mock.validNotificationSigV1 });
+        expect(res.statusCode).to.equal(200);
+        expect(res.result).to.equal(true);
+    });
+
+    it('returns 200 on valid payload, SignatureVersion 2', async () => {
+
+        const server = Hapi.server();
+        await server.register(Sns);
+        server.auth.strategy('sns', 'sns', { autoSubscribe: false, autoResubscribe: false });
+
+        server.auth.default('sns');
+        server.route({ path: '/', method: 'POST', handler: (request) => request.auth.credentials.sns });
+
+        const res = await server.inject({ method: 'POST', url: '/', payload: Mock.validNotificationSigV2 });
         expect(res.statusCode).to.equal(200);
         expect(res.result).to.equal(true);
     });
@@ -124,7 +138,7 @@ describe('Plugin', () => {
         server.auth.default('sns');
         server.route({ path: '/', method: 'POST', handler: successHandler, options: { auth: { scope: 'test' } } });
 
-        const res = await server.inject({ method: 'POST', url: '/', payload: Mock.validNotification });
+        const res = await server.inject({ method: 'POST', url: '/', payload: Mock.validNotificationSigV1 });
         expect(res.statusCode).to.equal(200);
     });
 
@@ -137,7 +151,7 @@ describe('Plugin', () => {
         server.auth.default('sns');
         server.route({ path: '/', method: 'POST', handler: successHandler, config: { auth: { scope: 'wrongScope' } } });
 
-        const res = await server.inject({ method: 'POST', url: '/', payload: Mock.validNotification });
+        const res = await server.inject({ method: 'POST', url: '/', payload: Mock.validNotificationSigV1 });
         expect(res.statusCode).to.equal(403);
         expect(res.result.message).to.equal('Insufficient scope');
     });

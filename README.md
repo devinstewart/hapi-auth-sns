@@ -10,6 +10,7 @@ Plugin for [hapi](https://hapi.dev) to easily setup an [auth strategy](https://h
 ```bash
 npm install --save hapi-auth-sns
 ```
+**Please note:** While `SignatureVersion` 1 is the default, on 2022-09-19 [AWS announced](https://aws.amazon.com/blogs/security/sign-amazon-sns-messages-with-sha256-hashing-for-http-subscriptions/) the ability to set topics with `SignatureVersion` 2. Starting with version `1.1.0` of this plugin, `SignatureVersion` 1 and 2 are supported.
 
 ## Getting Started
 ```js
@@ -105,7 +106,7 @@ The `request.payload` will have the following properties:
 - `Subject` - The subject of the message when the message type is `Notification`. This is not present if a Subject was not provided when the message was published.
 - `Message` - The message body when the message type is `Notification`.
 - `Timestamp` - The time the message was sent.
-- `SignatureVersion` - The version of the signature algorithm used to sign the message. Always `'1'`.
+- `SignatureVersion` - The version of the signature algorithm used to sign the message. Defaults to `1`, can also be `2`.
 - `Signature` - The signature of the message used to verify the message integrity.
 - `SigningCertURL` - The URL of the certificate used to sign the message.
 - `SubscribeURL` - The URL used to subscribe the route when the message type is `SubscriptionConfirmation` or `UnsubscribeConfirmation`.

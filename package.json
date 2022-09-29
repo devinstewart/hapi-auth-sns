@@ -1,7 +1,7 @@
 {
   "name": "hapi-auth-sns",
   "description": "AWS SNS Authentication",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "repository": "git://github.com/devinstewart/hapi-auth-sns",
   "main": "lib/index.js",
   "files": [
@@ -23,7 +23,7 @@
     "@hapi/boom": "^10.0.0",
     "@hapi/hoek": "^10.0.1",
     "joi": "^17.6.0",
-    "sns-payload-validator": "^1.0.4"
+    "sns-payload-validator": "^1.1.0"
   },
   "devDependencies": {
     "@hapi/code": "^9.0.1",
