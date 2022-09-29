@@ -31,9 +31,9 @@ internals.getKeys = (type) => {
 
 };
 
-internals.addSignature = (payload) => {
+internals.addSignature = (payload, signatureVersion = '1') => {
 
-    const sign = Crypto.createSign('sha1WithRSAEncryption');
+    const sign = signatureVersion === '1' ? Crypto.createSign('sha1WithRSAEncryption') : Crypto.createSign('sha256WithRSAEncryption');
     const keys = internals.getKeys(payload.Type);
     for (const key of keys) {
         if (key in payload) {
@@ -58,7 +58,7 @@ internals.SubscribePath = '/';
 internals.SubscribeParams = { Action: 'ConfirmSubscription', MoreStuff: 'MoreStuff' };
 internals.SubscribeURL = internals.SubscribeHost + internals.SubscribePath + '?Action' + '=' + internals.SubscribeParams.Action + '&MoreStuff' + '=' + internals.SubscribeParams.MoreStuff;
 
-internals.validNotification = {
+internals.validNotificationSigV1 = {
     Type: 'Notification',
     MessageId: internals.MessageId,
     TopicArn: internals.TopicArn,
@@ -66,6 +66,17 @@ internals.validNotification = {
     Message: 'Hello SNS!',
     Timestamp: (new Date()).toISOString(),
     SignatureVersion: '1',
+    SigningCertURL: internals.SigningCertURL
+};
+
+internals.validNotificationSigV2 = {
+    Type: 'Notification',
+    MessageId: internals.MessageId,
+    TopicArn: internals.TopicArn,
+    Subject: 'Regarding SNS',
+    Message: 'Hello SNS!',
+    Timestamp: (new Date()).toISOString(),
+    SignatureVersion: '2',
     SigningCertURL: internals.SigningCertURL
 };
 
@@ -101,7 +112,8 @@ internals.Mock = class {
     SubscribeHost = internals.SubscribeHost;
     SubscribeParams = internals.SubscribeParams;
     SubscribePath = internals.SubscribePath;
-    validNotification = internals.addSignature(internals.validNotification);
+    validNotificationSigV1 = internals.addSignature(internals.validNotificationSigV1);
+    validNotificationSigV2 = internals.addSignature(internals.validNotificationSigV2, '2');
     validSubscriptionConfirmation = internals.addSignature(internals.validSubscriptionConfirmation);
     validUnsubscribeConfirmation = internals.addSignature(internals.validUnsubscribeConfirmation);
 };
