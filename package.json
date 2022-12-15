@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@hapi/boom": "^10.0.0",
-    "@hapi/hoek": "^10.0.1",
+    "@hapi/hoek": "^11.0.2",
     "joi": "^17.6.0",
     "sns-payload-validator": "^1.1.0"
   },
