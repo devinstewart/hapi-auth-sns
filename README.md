@@ -2,7 +2,7 @@
 Plugin for [hapi](https://hapi.dev) to easily setup an [auth strategy](https://hapi.dev/api/?v=20.2.2#-serverauthstrategyname-scheme-options) that validates an [AWS SNS](https://docs.aws.amazon.com/sns/latest/dg/welcome.html) payload using the [sns-payload-validator](https://www.npmjs.com/package/sns-payload-validator).
 
 [![Coverage Status](https://coveralls.io/repos/github/devinstewart/hapi-auth-sns/badge.svg?branch=main)](https://coveralls.io/github/devinstewart/hapi-auth-sns?branch=main)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/devinstewart/hapi-auth-sns/ci.svg)](https://github.com/devinstewart/hapi-auth-sns/actions?query=workflow%3Aci+branch%3Amain)
+[![GitHub Workflow Status](https://github.com/devinstewart/hapi-auth-sns/actions/workflows/ci-plugin.yml/badge.svg?branch=main)](https://github.com/devinstewart/hapi-auth-sns/actions?query=workflow%3Aci+branch%3Amain)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=devinstewart_hapi-auth-sns&metric=sqale_rating)](https://sonarcloud.io/summary/overall?id=devinstewart_hapi-auth-sns)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=devinstewart_hapi-auth-sns&metric=security_rating)](https://sonarcloud.io/summary/overall?id=devinstewart_hapi-auth-sns)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=devinstewart_hapi-auth-sns&metric=reliability_rating)](https://sonarcloud.io/summary/overall?id=devinstewart_hapi-auth-sns)
@@ -85,15 +85,19 @@ auth: {
 ```
 
 ## Options
-There are two options available for the sns strategy:
+There are four options available for the sns strategy:
 - `autoSubscribe` - A message type of `SubscriptionConfirmation` automatically subscribes the route to the topic after validation, default `true`.
 - `autoResubscribe` - A message type of `UnsubscribeConfirmation` automatically resubscribes the route to the topic after validation, default `true`.
+- `useCache` - The plugin uses a cache to store the certificate for each topic. This is enabled by default, but can be disabled if you don't want to use the cache. If disabled, the certificate will be fetched from the SNS service for each request.
+- `maxCerts` - The maximum number of certificates to store in the cache. This is only used if `useCache` is enabled. The default is `5000`.
 
-Either one or both can be disabled when declaring the strategy:
+All settings can be changed when declaring the strategy:
 ```js
 server.auth.strategy('mySnsStrategy', 'sns', {
     autoSubscribe: false,
-    autoResubscribe: false
+    autoResubscribe: false,
+    useCache: true,
+    maxCerts: 100
 });
 ```
 
