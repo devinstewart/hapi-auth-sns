@@ -12,8 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, windows, macos]
-        node: ['16', '14']
-        hapi: ['20', '19']
+        node: ['18', '16', '14']
+        hapi: ['20', '21']
 
     runs-on: ${{ matrix.os }}-latest
     name: ${{ matrix.os }} node@${{ matrix.node }} hapi@${{ matrix.hapi }}

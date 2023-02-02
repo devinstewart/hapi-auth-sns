@@ -1,3 +1,7 @@
+**v2.0.0**
+- updated sns-payload-validator to v2.0.1 to support caching of certificates
+- drop support for hapi v19
+
 **v1.1.0**
 - upated sns-payload-validator to v1.1.0 to support SignatureVersion 2
 - add SignatureVersion 2 tests

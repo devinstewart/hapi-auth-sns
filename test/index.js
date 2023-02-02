@@ -222,4 +222,52 @@ describe('Plugin', () => {
         }
     });
 
+    it('throws an error when an useCache is not boolean', async () => {
+
+        try {
+            const server = Hapi.server();
+            await server.register(Sns);
+            server.auth.strategy('sns', 'sns', { useCache: null });
+        }
+        catch (err) {
+            expect(err.message).to.equal('"useCache" must be a boolean');
+        }
+    });
+
+    it('throws an error when an maxCerts is not an number', async () => {
+
+        try {
+            const server = Hapi.server();
+            await server.register(Sns);
+            server.auth.strategy('sns', 'sns', { maxCerts: false });
+        }
+        catch (err) {
+            expect(err.message).to.equal('"maxCerts" must be a number');
+        }
+    });
+
+    it('throws an error when an maxCerts is not an integer', async () => {
+
+        try {
+            const server = Hapi.server();
+            await server.register(Sns);
+            server.auth.strategy('sns', 'sns', { maxCerts: 1.4 });
+        }
+        catch (err) {
+            expect(err.message).to.equal('"maxCerts" must be an integer');
+        }
+    });
+
+    it('throws an error when an maxCerts is less than 1', async () => {
+
+        try {
+            const server = Hapi.server();
+            await server.register(Sns);
+            server.auth.strategy('sns', 'sns', { maxCerts: 0 });
+        }
+        catch (err) {
+            expect(err.message).to.equal('"maxCerts" must be greater than or equal to 1');
+        }
+    });
+
 });
